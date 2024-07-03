@@ -1,0 +1,86 @@
+@import "../../responsive.scss";
+
+.card.skeleton {
+  .skeleton-box {
+    background-color: #e0e0e0;
+    background-image: linear-gradient(
+      90deg,
+      #e0e0e0 0px,
+      #f0f0f0 40px,
+      #e0e0e0 80px
+    );
+    background-size: 300% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  .imageContainer {
+    flex: 2;
+    height: 200px;
+    border-radius: 10px;
+
+    @include md {
+      display: none;
+    }
+  }
+
+  .textContainer {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+
+    .title {
+      height: 24px;
+      width: 70%;
+    }
+
+    .address {
+      height: 16px;
+      width: 60%;
+    }
+
+    .price {
+      height: 24px;
+      width: 40%;
+      border-radius: 5px;
+    }
+
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+
+      .features {
+        display: flex;
+        gap: 20px;
+
+        .feature {
+          height: 24px;
+          width: 100px;
+          border-radius: 5px;
+        }
+      }
+
+      .icons {
+        display: flex;
+        gap: 20px;
+
+        .icon {
+          height: 24px;
+          width: 24px;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
