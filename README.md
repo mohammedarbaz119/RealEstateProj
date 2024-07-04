@@ -40,7 +40,7 @@ To run the Socket.IO server:
 Copy code
 cd sockets
 pnpm i
-node app.jj
+node app.js
 ```
 Folder Structure
 
