@@ -1,4 +1,4 @@
-# Welcome to Dreamestate
+# Dreamestate
 
 Dreamestate is your ultimate destination for exploring real estate with a modern twist. This MERN stack project, enhanced by Prisma for efficient database management and Socket.IO for real-time communication, redefines how you discover and engage with properties.
 
