@@ -130,7 +130,6 @@ function Chat({ chats }) {
     const read = async () => {
       try{
       await axios.get(`/api/chats/${chat.id}`, { withCredentials: true });
-
       }catch(err){
         console.log(err);
       }

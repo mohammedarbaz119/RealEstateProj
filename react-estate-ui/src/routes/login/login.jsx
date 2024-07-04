@@ -33,18 +33,16 @@ const Login = () => {
   const [serverMessage, setServerMessage] = useState({ type: "", content: "" });
   const navigate = useNavigate();
   const { user,updateUser } = useAuthContext();
- if(user){
+  if(user){
   return <Navigate to="/profile" />
- }
+  }
   const onSubmit = async (data) => {
     try {
       setServerMessage({ type: "", content: "" }); // Clear any previous messages
       const response = await axios.post("/api/auth/login", data);
       updateUser(response.data);
       setServerMessage({ type: "success", content: "Login successful" });
-      setTimeout(() => {
-        navigate("/"); // Adjust this to your app's post-login route
-      }, 150);
+      navigate("/"); // Adjust this to your app's post-login route;
     } catch (err) {
       console.error(err);
       if (err.response) {
