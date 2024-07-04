@@ -30,12 +30,11 @@ export const getPost = async (req, res) => {
       where: { id },
       include: {
         postDetail: true,
-        User: { select: { username: true, avatar: true } },
+        User: { select: { id:true,username: true, avatar: true } },
       },
     });
     let token = req.cookies.token;
     if(!token){
-    console.log("no token");
     res.status(200).json({ post: post, isSaved: false });
     return;
     }

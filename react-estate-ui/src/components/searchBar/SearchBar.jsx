@@ -1,10 +1,11 @@
 import { useState } from "react";
 import "./searchBar.scss";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 const types = ["buy", "rent"];
 
 function SearchBar() {
+  const nav = useNavigate();
   const [query, setQuery] = useState({
     type: "buy",
     city: "",
@@ -56,14 +57,10 @@ function SearchBar() {
           placeholder="Max Price"
           onChange={handleChange}
         />
-
-        <button>
-          <Link
-            to={`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`}
-          >
-            <img src="/search.png" alt="" />
-          </Link>
+        <button onClick={()=>nav(`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`)}>
+            <img src="/search.png" alt="load" />
         </button>
+          
       </form>
     </div>
   );

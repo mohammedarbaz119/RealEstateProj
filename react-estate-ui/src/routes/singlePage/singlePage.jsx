@@ -5,14 +5,18 @@ import Map from "../../components/map/Map";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
-import { useState } from "react";
+import MessageModal from "../../components/Modal/MessageModal";
+import { useEffect, useState } from "react";
 
 function SinglePage() {
   const data = useLoaderData();
   const {post,isSaved}=  data
   const nav = useNavigate();
+  const [chat,hasChat] = useState(false)
   const {user} = useAuthContext();
   const [saved,Setsaved] = useState(isSaved)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const handlesave = async () => {
     try {
       if(!user){
@@ -25,7 +29,63 @@ function SinglePage() {
       Setsaved(prev=>!prev)
       console.error("Error saving post:", error);
   }};
+  const openModal = () => {
+    if (!user) {
+      nav("/login");
+    } else {
+      setIsModalOpen(true);
+    }
+  };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleMessageSubmit = async (data) => {
+    try {
+      const response1 = await axios.post("/api/chats/haschat",{
+        receiverId: post.User.id
+      });
+      if(response1.data.chat){
+      const sendMessageresp = await axios.post("/api/messages/"+chat.id, {
+        text:data.message
+      })
+      closeModal();
+      setTimeout(()=>{
+        nav(`/profile`);
+       },500)
+       return;
+    }
+    else{
+    const response2 = await axios.post("/api/chats", {
+        receiverId: post.User.id,
+        message: data.message
+    });
+    closeModal();
+    setTimeout(()=>{
+        nav(`/profile`);
+       },500)
+    } 
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+
+// useEffect(() => {
+  
+// },[]); 
+  async function createChat() {
+    try {
+      const response = await axios.post("/api/chats", {
+        receiverId: post.userId,
+      });
+     setTimeout(()=>{
+      nav(`/profile`);
+     },500)
+    } catch (error) {
+      console.error("Error creating chat:", error);
+    }
+  }
   function roundToDecimalPlace(num, decimalPlaces) {
     const factor = Math.pow(10, decimalPlaces);
     return Math.round(num * factor) / factor;
@@ -34,7 +94,7 @@ function SinglePage() {
     <div className="singlePage">
       <div className="details">
         <div className="wrapper">
-          <Slider images={post.images} />
+          <Slider images={post.images.length>0?post.images:["/noimage.png"]} />
           <div className="info">
             <div className="top">
               <div className="post">
@@ -124,7 +184,7 @@ function SinglePage() {
             <Map items={[post]} />
           </div>
           <div className="buttons">
-            <button>
+            <button onClick={openModal}>
               <img src="/chat.png" alt="" />
               Send a Message
             </button>
@@ -135,6 +195,11 @@ function SinglePage() {
           </div>
         </div>
       </div>
+      <MessageModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={handleMessageSubmit}
+      />
     </div>
   );
 }

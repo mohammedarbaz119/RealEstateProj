@@ -26,7 +26,7 @@
 
 //   const handleSendMessage = async(e) => {
 //    e.preventDefault()
-//    setSendMessage(""); 
+//    setSendMessage("");
 //    try{
 //       const res = await axios.post(`/api/messages/${chat.id}`,{text:SendMessage},{withCredentials:true});
 //       setChat({...chat,messages:[...chat.messages,res.data.message]});
@@ -50,7 +50,7 @@
 //             </div>
 //           )})
 //         }
-        
+
 //       </div>
 //       {chat && (
 //         <div className="chatBox">
@@ -67,7 +67,7 @@
 //           <div className="center">
 //             {
 //               chat.messages.map((message)=>(
-//                 <div key={message.id} className={`chatMessage`} 
+//                 <div key={message.id} className={`chatMessage`}
 //                 style={{alignSelf:message.userId===user.id?"flex-end":"flex-start",
 //                   textAlign:message.userId===user.id?"right":"left"
 //                 }}>
@@ -93,19 +93,25 @@ import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import timeAgo from "../../lib/TimeCalc";
 import { useSocketContext } from "../../context/SocketContext";
-function Chat({ chats }) {
+import { useNotifStore } from "../../lib/NotificationStore";
+function Chat({ chats,updateChats }) {
   const [SendMessage, setSendMessage] = useState("");
   const { user } = useAuthContext();
-  const {socket} = useSocketContext();
+  const { socket } = useSocketContext();
   const [chat, setChat] = useState(null);
   const [selectedChatId, setSelectedChatId] = useState(null);
   const messagesEndRef = useRef(null);
-
+  const decrementnotif = useNotifStore((state) => state.decrement);
   const handleOpenChat = async (id, receiver) => {
     try {
-      const res = await axios.get(`/api/chats/${id}`, { withCredentials: true });
+      const res = await axios.get(`/api/chats/${id}`, {
+        withCredentials: true,
+      });
       setChat({ ...res.data.chat, receiver });
-      setSelectedChatId(id); // Set the selected chat ID
+      setSelectedChatId(id);
+      if(!res.data.chat.seenBy.includes(user.id)){
+        decrementnotif();
+      }
     } catch (err) {
       console.log(err);
     }
@@ -114,39 +120,56 @@ function Chat({ chats }) {
   const handleSendMessage = async (e) => {
     e.preventDefault();
     try {
-      socket.emit("sendMessage", {data:SendMessage,receiverId:chat.receiver.id});
+      socket.emit("sendMessage", {
+        data: SendMessage,
+        receiverId: chat.receiver.id,
+      });
       const res = await axios.post(
         `/api/messages/${chat.id}`,
         { text: SendMessage },
         { withCredentials: true }
       );
       setSendMessage("");
-      setChat({ ...chat, messages: [...chat.messages, res.data.message] }); 
+      setChat({ ...chat, messages: [...chat.messages, res.data.message] });
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
     const read = async () => {
-      try{
-      await axios.get(`/api/chats/${chat.id}`, { withCredentials: true });
-      }catch(err){
+      try {
+        await axios.get(`/api/chats/${chat.id}`, { withCredentials: true });
+      } catch (err) {
         console.log(err);
       }
     };
     if (chat && socket) {
       socket.on("getMessage", (data) => {
-        setChat({ ...chat, messages: [...chat.messages, { text: data, userId: chat.receiver.id,id:chat.receiver.id,createdAt:new Date() }] });
+        setChat({
+          ...chat,
+          messages: [
+            ...chat.messages,
+            {
+              text: data,
+              userId: chat.receiver.id,
+              id: chat.receiver.id,
+              createdAt: new Date(),
+            },
+          ],
+        });
         read();
-      })
+      });
     }
-    
-    }, [socket,chat]);
+    return () => {
+      if (socket) {
+        socket.off("getMessage");
+      }
+    };
+  }, [socket, chat]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
- 
 
   useEffect(() => {
     if (chat) {
@@ -161,10 +184,17 @@ function Chat({ chats }) {
         {chats.map((chat) => (
           <div
             onClick={() => handleOpenChat(chat.id, chat.receiver)}
-            className={`message ${selectedChatId === chat.id ? 'selected' : ''}`} // Conditionally apply the 'selected' class
+            className={`message ${
+              selectedChatId === chat.id ? "selected" : ""
+            }`} // Conditionally apply the 'selected' class
             key={chat.id}
             style={{
-              backgroundColor: selectedChatId === chat.id ? "#d3d3d3" : (chat.seenBy.includes(user.id) ? "white" : "#fecd514e"),
+              backgroundColor:
+                selectedChatId === chat.id
+                  ? "#d3d3d3"
+                  : chat.seenBy.includes(user.id)
+                  ? "white"
+                  : "#fecd514e",
             }}
           >
             <img src={chat.receiver.avatar || "/noavatar.jpeg"} alt="" />
@@ -180,7 +210,12 @@ function Chat({ chats }) {
               <img src={chat.receiver.avatar || "/noavatar.jpeg"} alt="" />
               {chat.receiver.username}
             </div>
-            <span className="close" onClick={() => setChat(null)}>X</span>
+            <span className="close" onClick={() => {
+              setSelectedChatId(null)
+              setChat(null)
+              }}>
+              X
+            </span>
           </div>
           <div className="center">
             {chat.messages.map((message) => (
@@ -188,7 +223,8 @@ function Chat({ chats }) {
                 key={message.id}
                 className={`chatMessage`}
                 style={{
-                  alignSelf: message.userId === user.id ? "flex-end" : "flex-start",
+                  alignSelf:
+                    message.userId === user.id ? "flex-end" : "flex-start",
                   textAlign: message.userId === user.id ? "right" : "left",
                 }}
               >
@@ -199,7 +235,10 @@ function Chat({ chats }) {
             <div ref={messagesEndRef} />
           </div>
           <form className="bottom" onSubmit={handleSendMessage}>
-            <textarea value={SendMessage} onChange={(e) => setSendMessage(e.target.value)} />
+            <textarea
+              value={SendMessage}
+              onChange={(e) => setSendMessage(e.target.value)}
+            />
             <button type="submit">Send</button>
           </form>
         </div>
@@ -209,4 +248,3 @@ function Chat({ chats }) {
 }
 
 export default Chat;
-

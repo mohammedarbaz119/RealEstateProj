@@ -7,12 +7,14 @@ import "./profilePage.scss";
 import { useAuthContext } from "../../context/AuthContext";
 import { useEffect } from "react";
 import { Suspense } from "react";
+import { useState } from "react";
 import SkeletonCard from "../../components/skeletonloader/SkeletonCard";
 import SkeletonChat from "../../components/Cardloader/SkeletonChat";
 
 function ProfilePage() {
   const data = useLoaderData();
   const nav = useNavigate();
+  const [chats,setChats] = useState([]);
   const { user, updateUser } = useAuthContext();
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import prisma from '../lib/prisma.js';
 import jwt from 'jsonwebtoken';
 const age = 1000*60*60*24*7;
 export const register = async (req, res) => {
-const {username,email,password} = req.body;
+const {username,email,password,avatar} = req.body;
 try{
 const userexist = await prisma.user.findFirst({ 
     where:{
@@ -17,13 +17,15 @@ const userexist = await prisma.user.findFirst({
 if(userexist){
     return res.status(400).json({"message":"username or email already exists" });
 } 
+
 const hashpassword = await bcrypt.hash(password,10);
 
     const user = await prisma.user.create({
         data:{
             username,
             email,
-            password:hashpassword
+            password:hashpassword,
+            avatar:avatar|| undefined
         }
     });
     console.log(user);

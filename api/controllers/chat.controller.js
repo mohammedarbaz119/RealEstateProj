@@ -8,8 +8,15 @@ export const getAllchats = async (req, res) => {
                 userIDs: {
                     hasSome: [userId],
                 },
-
             },
+            include:{
+                messages:{
+                    select:{
+                        createdAt:true
+                    }
+                }
+            }
+            
         });
         for (const chat of chats) {
             const receiverId = chat.userIDs.find(id => id !== userId);
@@ -17,6 +24,7 @@ export const getAllchats = async (req, res) => {
                 where: {
                     id: receiverId
                 },
+
                 select: {
                     id: true,
                     username: true,
@@ -25,6 +33,9 @@ export const getAllchats = async (req, res) => {
             });
             chat.receiver = receiver;
         }
+        chats.sort((a, b) => {
+            return new Date(b.messages[b.messages.length - 1].createdAt) - new Date(a.messages[a.messages.length - 1].createdAt);
+        });
         res.status(200).json({ chats });
     } catch (err) {
         console.log(err);
@@ -73,12 +84,23 @@ export const getSinglechat = async (req, res) => {
 export const addChat = async (req, res) => {
     try {
         const userId = req.userId;
-        const { receiverId } = req.body;
+        const { receiverId,message } = req.body;
+        const chatData = {
+            seenBy: [userId],
+          };
+          if(message){
+            chatData.lastMessage = message
+                chatData.messages = {
+                    create:{
+                        text:message,
+                        userId:userId,
+                    },
+                };
+          }
         const chat = await prisma.chat.create({
             data: {
-                userIDs: {
-                    set: [userId, receiverId],
-                },
+                userIDs:[userId,receiverId],
+                ...chatData,
             },
         });
         res.status(200).json({ chat });
@@ -118,3 +140,41 @@ export const readChats = async (req, res) => {
         res.status(500).json({ message: "failed to get all chats" });
     }
 };
+
+
+export const getAllunreadchatsnos = async (req, res) => {
+    try {
+        const userId = req.userId;
+        let chats = await prisma.chat.findMany({
+            where: {
+                userIDs: {
+                    hasSome: [userId],
+                },
+            },
+        });
+        chats = chats.filter(chat => !chat.seenBy.includes(userId))
+        res.status(200).json({ notifs:chats.length });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "failed to get all chats" });
+    }
+}
+
+export const getHasChat = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { receiverId } = req.body;
+        console.log(req.body)
+        const chat = await prisma.chat.findFirst({
+            where: {
+                userIDs: {
+                    hasEvery: [userId,receiverId],
+                },
+            },
+        });
+        res.status(200).json({ chat });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "failed to get chat" });
+    }
+}

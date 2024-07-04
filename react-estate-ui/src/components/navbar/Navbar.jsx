@@ -88,11 +88,17 @@ import { Link } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useNotifStore } from "../../lib/NotificationStore";
 
 function Navbar() {
+  const notifications = useNotifStore((state) => state.Notifications);
   const [open, setOpen] = useState(false);
   const { user, updateUser } = useAuthContext();
   const nav = useNavigate();
+  const fetchnotifications = useNotifStore((state) => state.fetchnotifs);
+  if(user){
+    fetchnotifications();
+  }
 
   const handleLogout = async () => {
     try {
@@ -135,7 +141,7 @@ function Navbar() {
             <img src={user.avatar || "/noavatar.jpeg"} alt="" />
             <span>{user.username}</span>
             <Link to="/profile" className="profile">
-              <div className="notification">3</div>
+             {notifications>=1&&<div className="notification">{notifications}</div>}
               <span>Profile</span>
             </Link>
           </div>

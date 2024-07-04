@@ -1,13 +1,31 @@
+@import "../../responsive.scss";
+
 .register {
   height: 100%;
   display: flex;
+  
+  
+  
+  @include sm{
+    height: fit-content;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
 
   .formContainer {
     flex: 3;
-    height: 100%;
     display: flex;
+    padding-top:calc(50px + 10%);
+    padding-bottom: calc(50px + 5%);
+    overflow-y: auto;
     align-items: center;
     justify-content: center;
+    @include sm{
+      padding: 0px;
+      overflow-y: auto;
+      height: fit-content;
+    }
 
     form {
       display: flex;
@@ -19,6 +37,7 @@
         border: 1px solid gray;
         border-radius: 5px;
       }
+      
 
       button {
         padding: 20px;
@@ -45,9 +64,44 @@
         border-bottom: 1px solid gray;
         width: max-content;
       }
+      .avatar-upload-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .avatar-preview {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 20px;
+
+          .avatar-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+          }
+
+          .remove-avatar-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 15px;
+            font-size: 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+
+            &:hover {
+              background-color: #c82333;
+            }
+          }
     }
   }
-
+}
+}
   .imgContainer {
     flex: 2;
     background-color: #fcf5f3;
@@ -56,6 +110,9 @@
     justify-content: center;
     img {
       width: 100%;
+    }
+    @include sm{
+      display: none;
     }
   }
 }

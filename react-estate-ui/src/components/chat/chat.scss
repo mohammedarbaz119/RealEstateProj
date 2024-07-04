@@ -1,3 +1,4 @@
+@import "../../responsive.scss";
 .chat {
   height: 100%;
   display: flex;
@@ -41,9 +42,22 @@
     flex: 1;
     background-color: white;
     display: flex;
+    position: absolute;
+    bottom: 0;
+    left:65%;
+    width: 30%;
     flex-direction: column;
     justify-content: space-between;
+   
 
+    @include md{
+      width: 40%;
+      left: 60%;
+    }
+    @include sm{
+      width: 90%;
+      left: 5%;
+    }
     .top {
       background-color: #f7c14b85;
       padding: 20px;

@@ -25,14 +25,14 @@ const getUser = (userId) => {
 
 io.on("connection", (socket) => {
   socket.on("newUser", (userId) => {
-    console.log(userId + "this is");
     addUser(userId, socket.id);
   });
 
   socket.on("sendMessage", ({ receiverId, data }) => {
-    console.log(receiverId);
     const receiver = getUser(receiverId);
-    io.to(receiver.socketId).emit("getMessage", data);
+    if(receiver){
+      io.to(receiver.socketId).emit("getMessage", data);
+    }
   });
 
   socket.on("disconnect", () => {
