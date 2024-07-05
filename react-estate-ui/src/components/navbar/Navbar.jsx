@@ -21,6 +21,7 @@ function Navbar() {
     try {
       await ApiRequest.post("/auth/logout");
       updateUser(null);
+      setOpen(false);
       nav("/");
     } catch (err) {
       console.log(err);
@@ -47,10 +48,10 @@ function Navbar() {
           <img src="/logo.png" alt="" />
           <span>DreamEstate</span>
         </a>
-        <Link to={"/"}>Home</Link>
-        <Link to={"/about"}>About</Link>
-        <Link to={"/contact"}>Contact</Link>
-        <Link to={"/agents"}>Agents</Link>
+        <Link to={"/"} >Home</Link>
+        <Link to={"/about"} >About</Link>
+        <Link to={"/contact"} >Contact</Link>
+        <Link to={"/agents"} >Agents</Link>
       </div>
       <div className="right">
       {user ? (
@@ -78,14 +79,14 @@ function Navbar() {
           />
         </div>
         <div className={open ? "menu active" : "menu"}>
-        <Link to={"/"}>Home</Link>
-        <Link to={"/about"}>About</Link>
-        <Link to={"/contact"}>Contact</Link>
-        <Link to={"/agents"}>Agents</Link>
+        <Link to={"/"} onClick={()=>setOpen(false)}>Home</Link>
+        <Link to={"/about"} onClick={()=>setOpen(false)}>About</Link>
+        <Link to={"/contact"}  onClick={()=>setOpen(false)}>Contact</Link>
+        <Link to={"/agents"}  onClick={()=>setOpen(false)}>Agents</Link>
           {user ? (
             <>
             <button>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile"  onClick={()=>setOpen(false)}>Profile</Link>
             </button>
             <button onClick={handleLogout}>
               Logout
