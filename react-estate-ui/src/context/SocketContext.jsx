@@ -8,7 +8,7 @@ export default function SocketContextProvider({children}) {
   const [socket, setsocket] = useState(null);
 
 useEffect(() => {
-    setsocket(io("http://localhost:4000"));
+    setsocket(io(import.meta.env.VITE_SOCKET_URL||"http://localhost:4000"));
     // localStorage.setItem("socket", JSON.stringify(socket));
 }, []);
 useEffect(() => {
