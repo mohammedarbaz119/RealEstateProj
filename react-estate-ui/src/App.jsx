@@ -11,6 +11,7 @@ import NewPostPage from "./routes/newPostPage/newPostPage";
 import { LoadAll, LoadSingle, ProfilePostsLoader } from "./lib/loader";
 import AboutPage from "./routes/About/About";
 import ContactPage from "./routes/Contact/Contact";
+import { Link } from "react-router-dom";
 
 function App() {
   const router = createBrowserRouter([
@@ -54,7 +55,10 @@ function App() {
         },
         {
           path: "/*",
-          element: <div>404 not found</div>,
+          element: <>
+          <div>404 not found</div>
+          <Link to={"/"}>Go back to home</Link>
+          </>,
         },
       ],
     },
