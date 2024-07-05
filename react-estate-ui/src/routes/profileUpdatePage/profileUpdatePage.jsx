@@ -5,6 +5,7 @@ import "./profileUpdatePage.scss";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CloudinaryUploadWidget from "../../components/uploadWidget/CloudinaryUploadWidget"
+import ApiRequest from '../../lib/AxiosConfig';
 
 function ProfileUpdatePage() {
   const { user, updateUser } = useAuthContext();
@@ -26,7 +27,7 @@ function ProfileUpdatePage() {
       if(avatar){
         data.avatar = avatar;
       } // Clear previous messages
-      const response = await axios.put(`/api/users/${user.id}`, data);
+      const response = await ApiRequest.put(`/users/${user.id}`, data);
       updateUser(response.data.user);
       setServerMessage({ type: "success", content: "Profile updated successfully!" });
       setTimeout(() => {

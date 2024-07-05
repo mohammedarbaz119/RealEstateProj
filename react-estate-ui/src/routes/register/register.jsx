@@ -313,13 +313,13 @@
 // export default Register;
 
 
-import React, { useState } from "react";
+import { useState } from "react";
 import "./register.scss";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CloudinaryUploadWidget from "../../components/uploadWidget/CloudinaryUploadWidget";
+import ApiRequest from "../../lib/AxiosConfig";
 
 function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -333,7 +333,7 @@ function Register() {
       if (avatar) {
         data.avatar = avatar;
       }
-      const response = await axios.post("/api/auth/register", data);
+      const response = await ApiRequest.post("/auth/register", data);
       setServerMessage({ type: "success", content: "User created successfully" });
       setTimeout(() => {  
         nav("/login");

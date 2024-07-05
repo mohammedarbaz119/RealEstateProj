@@ -52,6 +52,7 @@ import axios from 'axios';
 import MessageModal from '../Modal/MessageModal';
 import { useAuthContext } from '../../context/AuthContext';
 import './card.scss';
+import ApiRequest from '../../lib/AxiosConfig';
 
 function Card({ item }) {
   const [isSaved, setIsSaved] = useState(item.isSaved);
@@ -60,7 +61,7 @@ function Card({ item }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     function getdata() {
-      axios.get('/api/posts/'+item.id,{withCredentials:true}).then((res) => {
+      ApiRequest.get('/posts/'+item.id,{withCredentials:true}).then((res) => {
         setIsSaved(res.data.isSaved);
       });
     }
@@ -75,7 +76,7 @@ const handleSave = async () => {
     }
     try {
       setIsSaved(prev=>!prev);
-      const response = await axios.post('/api/users/save', { postId: item.id });
+      const response = await ApiRequest.post('/users/save', { postId: item.id });
     } catch (error) {
       setIsSaved(prev=>!prev);
       console.error('Error saving item:', error);
@@ -96,11 +97,11 @@ const openModal = () => {
 
   const handleMessageSubmit = async (data) => {
     try {
-      const response1 = await axios.post("/api/chats/haschat",{
+      const response1 = await ApiRequest.post("/chats/haschat",{
         receiverId: item.userId
       });
       if(response1.data.chat){
-      const sendMessageresp = await axios.post("/api/messages/"+response1.data.chat.id, {
+      const sendMessageresp = await ApiRequest.post("/messages/"+response1.data.chat.id, {
         text:data.message
       })
       closeModal();
@@ -108,7 +109,7 @@ const openModal = () => {
        return;
     }
     else{
-    const response2 = await axios.post("/api/chats", {
+    const response2 = await ApiRequest.post("/chats", {
         receiverId: item.userId,
         message: data.message
     });

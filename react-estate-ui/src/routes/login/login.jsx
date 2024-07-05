@@ -27,6 +27,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import "./login.scss";
 import { useAuthContext } from '../../context/AuthContext';
+import ApiRequest from '../../lib/AxiosConfig';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
@@ -39,7 +40,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setServerMessage({ type: "", content: "" }); // Clear any previous messages
-      const response = await axios.post("/api/auth/login", data);
+      const response = await ApiRequest.post("/auth/login", data);
       updateUser(response.data);
       setServerMessage({ type: "success", content: "Login successful" });
       navigate("/"); // Adjust this to your app's post-login route;

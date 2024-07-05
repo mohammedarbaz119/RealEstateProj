@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import { useState } from "react";
 import SkeletonCard from "../../components/skeletonloader/SkeletonCard";
 import SkeletonChat from "../../components/Cardloader/SkeletonChat";
+import ApiRequest from "../../lib/AxiosConfig";
 
 function ProfilePage() {
   const data = useLoaderData();
@@ -25,7 +26,7 @@ function ProfilePage() {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/api/auth/logout");
+      await ApiRequest.post("/auth/logout");
       updateUser(null);
       nav("/");
     }
@@ -118,6 +119,7 @@ function ProfilePage() {
 }
 
 export default ProfilePage;
+
 // import React, { Suspense, useEffect } from 'react';
 // import { Link, useLoaderData, useNavigate, Await } from "react-router-dom";
 // import axios from "axios";

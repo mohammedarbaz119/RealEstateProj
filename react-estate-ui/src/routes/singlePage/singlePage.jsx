@@ -4,9 +4,9 @@ import DOMPurify from 'dompurify';
 import Map from "../../components/map/Map";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
-import axios from "axios";
 import MessageModal from "../../components/Modal/MessageModal";
 import { useEffect, useState } from "react";
+import ApiRequest from "../../lib/AxiosConfig";
 
 function SinglePage() {
   const data = useLoaderData();
@@ -23,7 +23,7 @@ function SinglePage() {
         nav("/login");
       }
       Setsaved(prev=>!prev)
-      const reps =await axios.post(`/api/users/save`,
+      const reps =await ApiRequest.post(`/users/save`,
       {postId:post.id});
     } catch (error) {
       Setsaved(prev=>!prev)
@@ -43,11 +43,11 @@ function SinglePage() {
 
   const handleMessageSubmit = async (data) => {
     try {
-      const response1 = await axios.post("/api/chats/haschat",{
+      const response1 = await ApiRequest.post("/chats/haschat",{
         receiverId: post.User.id
       });
       if(response1.data.chat){
-      const sendMessageresp = await axios.post("/api/messages/"+chat.id, {
+      const sendMessageresp = await ApiRequest.post("/messages/"+chat.id, {
         text:data.message
       })
       closeModal();
@@ -57,7 +57,7 @@ function SinglePage() {
        return;
     }
     else{
-    const response2 = await axios.post("/api/chats", {
+    const response2 = await ApiRequest.post("/chats", {
         receiverId: post.User.id,
         message: data.message
     });
@@ -76,7 +76,7 @@ function SinglePage() {
 // },[]); 
   async function createChat() {
     try {
-      const response = await axios.post("/api/chats", {
+      const response = await ApiRequest.post("/chats", {
         receiverId: post.userId,
       });
      setTimeout(()=>{

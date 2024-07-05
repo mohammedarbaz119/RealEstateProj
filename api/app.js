@@ -10,7 +10,7 @@ import Messagerouter from "./routes/message.route.js";
 const app = express();
 
 app.use(cors({
-    origin:"https://dreamestate.vercel.app/",
+    origin:"https://dreamestate.vercel.app",
     credentials: true,
 }));
 app.use(express.json());

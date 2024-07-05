@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
 import CloudinaryUploadWidget from "../../components/uploadWidget/CloudinaryUploadWidget";
 import "./newPostPage.scss";
+import ApiRequest from '../../lib/AxiosConfig';
 
 function NewPostPage() {
   const { register, handleSubmit,control, formState: { errors } } = useForm();
@@ -48,7 +49,7 @@ function NewPostPage() {
       };
       console.log(postData);
 
-      const response = await axios.post('/api/posts', postData);
+      const response = await ApiRequest.post('/posts', postData);
       setServerMessage({ type: "success", content: "Post created successfully!" });
       setTimeout(() => {
         navigate("/profile");
