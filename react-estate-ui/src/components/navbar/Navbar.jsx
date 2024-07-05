@@ -94,8 +94,8 @@ function Navbar() {
            </>
           ) : (
             <>
-              <Link to="/login">Sign in</Link>
-              <Link to="/register">Sign up</Link>
+              <Link to="/login" onClick={()=>setOpen(false)}>Sign in</Link>
+              <Link to="/register" onClick={()=>setOpen(false)}>Sign up</Link>
             </>
           )}
         </div>
