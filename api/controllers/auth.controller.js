@@ -53,7 +53,12 @@ export const login = async (req, res) => {
         }
         const {password:_,...rest} = user;
         const token = jwt.sign({id:user.id},process.env.JWT_SECRET,{expiresIn:age});
-        res.cookie('token',token, {httpOnly:true}).status(200).json(rest);
+        res.cookie('token',token, {
+            httpOnly:true,
+            maxAge: age,
+            secure: true,
+            sameSite: none
+        }).status(200).json(rest);
     }
     catch(err){
         res.status(500).json({"message":`failed to login ${err.message}`});
