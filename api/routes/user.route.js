@@ -5,7 +5,6 @@ const router = express.Router();
 router.get("/profilePosts",isAuth,getProfilePosts);
 router.post("/save",isAuth,savePost);
 router.post("/:id",isAuth,getUser);
-router.get("/",isAuth,getUsers);
 router.put("/:id", isAuth,updateUser);
 router.delete("/:id", isAuth,deleteUser);
 
