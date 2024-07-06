@@ -104,7 +104,10 @@
 
 .homePage {
   display: flex;
-  height: fit-content;
+  min-height: max-content;
+  @include sm {
+padding-bottom: 20px;  
+}
 
   
 
@@ -150,7 +153,7 @@
         justify-content: space-between;
 
         @include sm {
-          display: none; /* Hide boxes on small screens */
+          display: none; 
         }
 
         h1 {

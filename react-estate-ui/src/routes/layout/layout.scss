@@ -1,10 +1,10 @@
 @import "../../responsive.scss";
 
 .layout {
-  overflow-x: hidden;
   margin-left: auto;
   margin-right: auto;
   height: 100dvh;
+  overflow: hidden;
   padding-left: 20px;
   padding-right: 20px;
   display: flex;
