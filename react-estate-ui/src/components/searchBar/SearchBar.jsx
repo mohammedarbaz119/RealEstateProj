@@ -57,7 +57,7 @@ function SearchBar() {
           placeholder="Max Price"
           onChange={handleChange}
         />
-        <button onClick={()=>nav(`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`)}>
+        <button  type={"button"} onClick={()=>nav(`/list?type=${query.type}&city=${query.city}&minPrice=${query.minPrice}&maxPrice=${query.maxPrice}`)}>
             <img src="/search.png" alt="load" />
         </button>
           
