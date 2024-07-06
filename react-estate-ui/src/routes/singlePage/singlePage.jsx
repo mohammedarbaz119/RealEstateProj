@@ -7,6 +7,7 @@ import { useAuthContext } from "../../context/AuthContext";
 import MessageModal from "../../components/Modal/MessageModal";
 import { useEffect, useState } from "react";
 import ApiRequest from "../../lib/AxiosConfig";
+import ErrorPage from "../../components/Error/ErrorPage";
 
 function SinglePage() {
   const data = useLoaderData();
@@ -16,6 +17,10 @@ function SinglePage() {
   const {user} = useAuthContext();
   const [saved,Setsaved] = useState(isSaved)
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if(post==="error"){
+    return <ErrorPage/>
+  }
 
   const handlesave = async () => {
     try {

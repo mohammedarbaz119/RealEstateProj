@@ -1,8 +1,17 @@
 import ApiRequest from "./AxiosConfig.js";
 import { defer } from "react-router-dom";
 export const LoadSingle = async ({params})=>{
-    const res = await ApiRequest.get(`/posts/${params.id}`);
-    return res.data
+    try{
+        if(!params.id){
+            return {post:"error",isSaved:false};
+        }
+        const res = await ApiRequest.get(`/posts/${params.id}`);
+        return res.data
+    }
+    catch(err){
+        return {post:"error",isSaved:false};        
+    }
+   
 }
 
 export const LoadAll = async ({request,params})=>{
