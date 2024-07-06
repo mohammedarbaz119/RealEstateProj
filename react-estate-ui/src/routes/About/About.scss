@@ -6,8 +6,9 @@
   height: fit-content;
 
   @include sm {
-    overflow: auto;
-    height: 150%;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    min-height: fit-content;
   }
 
   .textContainer {

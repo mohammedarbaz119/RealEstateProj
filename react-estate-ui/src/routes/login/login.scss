@@ -1,3 +1,4 @@
+@import '../../responsive.scss';
 .login {
   height: 100%;
   display: flex;
@@ -56,6 +57,12 @@
     justify-content: center;
     img {
       width: 100%;
+    }
+  }
+  @include sm{
+    flex-direction: column;
+    .imgContainer{
+      display: none;
     }
   }
 }

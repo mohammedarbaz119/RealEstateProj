@@ -2,19 +2,22 @@
 
 .contactPage {
   display: flex;
+  padding-bottom: 20px;
   overflow: auto;
   height: fit-content;
 
   @include sm {
     overflow: auto;
     min-height: fit-content;
+    margin-bottom: 10px;
+  
   }
 
   .textContainer {
-    flex: 3;
+    width: 100%;
 
     .wrapper {
-      padding-right: 100px;
+      padding-right: 40px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -52,16 +55,27 @@
         gap: 20px;
 
         input, textarea {
+          width: 60%;
+
           padding: 10px;
-          width: 50%;
-          border: 1px solid #ddd;
+          border: 1px solid rgb(43, 40, 40);
           border-radius: 5px;
           font-size: 16px;
+          @include sm{
+            padding: 15px;
+          width: 100%;
+
+          }
         }
         button{
-            width: 25%;
-            margin-left: 10%;
+            width: 50%;
+            margin-left: 5%;
+            @include sm{
+                width: 60%;
+                margin-left: 15%;
+            }
         }
+
 
         textarea {
           height: 150px;

@@ -21,11 +21,11 @@ function ContactPage() {
           <div className="contactInfo">
             <div className="infoItem">
               <h3>Address</h3>
-              <p>123 Dreamestate Street, Real City, 12345</p>
+              <p>RA colony</p>
             </div>
             <div className="infoItem">
               <h3>Phone</h3>
-              <p>+1 (123) 456-7890</p>
+              <p>+91 (123) 456-7890</p>
             </div>
             <div className="infoItem">
               <h3>Email</h3>
