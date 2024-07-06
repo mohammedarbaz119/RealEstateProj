@@ -15,6 +15,7 @@ export const getAllposts = async (req, res) => {
         },
       },
     });
+    console.log(posts+"Dekho");
     res.status(200).json({ posts });
   } catch (err) {
     console.log(err);

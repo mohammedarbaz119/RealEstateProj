@@ -1,7 +1,6 @@
 import "./listPage.scss";
 import { Suspense } from "react";
 import Filter from "../../components/filter/Filter"
-import Card from "../../components/card/Card"
 import Map from "../../components/map/Map";
 import { useLoaderData, Await } from "react-router-dom";
 import SkeletonCard from "../../components/skeletonloader/SkeletonCard";
