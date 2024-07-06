@@ -21,6 +21,7 @@ function ListPage() {
           >
             {(resp) =>
             {
+              console.log(resp.data.posts)  
               if(resp.data.posts.length === 0){
                 return <p>No posts found</p>
               }
