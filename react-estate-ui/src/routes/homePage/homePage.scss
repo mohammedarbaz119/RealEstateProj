@@ -111,7 +111,7 @@
   .textContainer {
     flex: 3;
     @include sm {
-      min-height: 100vh; 
+      min-height: 100dvh; 
       overflow: auto; 
       flex-direction: column;
       text-align: left;
