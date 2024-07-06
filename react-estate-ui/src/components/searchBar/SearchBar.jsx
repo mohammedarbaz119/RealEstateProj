@@ -34,7 +34,7 @@ function SearchBar() {
           </button>
         ))}
       </div>
-      <form>
+      <form onSubmit={e=>e.preventDefault()}>
         <input
           type="text"
           name="city"
