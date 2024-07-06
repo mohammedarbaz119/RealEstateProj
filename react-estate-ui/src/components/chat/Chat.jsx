@@ -41,7 +41,7 @@ function Chat({ chats }) {
         { withCredentials: true }
       );
       setSendMessage("");
-      setChat({ ...chat, messages: [...chat.messages, res.data.message] });
+      setChat({ ...chat,lastMessage:res.data.message, messages: [...chat.messages, res.data.message] });
     } catch (err) {
       console.log(err);
     }

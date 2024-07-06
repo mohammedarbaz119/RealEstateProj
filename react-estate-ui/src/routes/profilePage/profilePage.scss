@@ -3,8 +3,13 @@
 .profilePage {
   display: flex;
   height: 100%;
+  @include sm{
+    flex-direction: column;
+    overflow: auto;
+  }
 
   @include md{
+    height: fit-content;
     flex-direction: column;
     overflow: auto;
   }
