@@ -104,14 +104,15 @@
 
 .homePage {
   display: flex;
-  height: 90%;
+  height: auto;
 
   
 
   .textContainer {
     flex: 3;
     @include sm {
-      min-height: 100dvh; 
+      min-height: fit-content;
+      height: auto; 
       overflow: auto; 
       flex-direction: column;
       text-align: left;
@@ -133,12 +134,12 @@
       }
 
       @include sm {
+        height: 85dvh;
         justify-content: flex-start;
       }
 
       .title {
         font-size: 48px; 
-
         @include sm {
           font-size: 30px;
         }
