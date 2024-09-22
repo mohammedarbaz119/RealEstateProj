@@ -13,6 +13,7 @@ app.use(cors({
     origin:"https://dreamestate.vercel.app",
     credentials: true,
 }));
+app.get("/",(req,res)=>res.json({"message":"yes running"}))
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}));
