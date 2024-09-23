@@ -101,17 +101,17 @@ function ProfilePage() {
       </div>
       <div className="chatContainer">
         <div className="wrapper">
-        <Suspense fallback={<SkeletonChat/>}>
+        {/* <Suspense fallback={<SkeletonChat/>}>
             <Await
               resolve={data.chats}
-              errorElement={<p>Error loading posts!</p>}
+              errorElement={<p>Error loading Chats</p>}
             >
-              {(resp) =>{
-                return <Chat chats={resp.data.chats}/>
-              }
-              }
-            </Await>
-          </Suspense>
+              {(resp) =>{ */}
+           <Chat />
+          {/* //     }
+          //     }
+          //   </Await>
+          // </Suspense> */}
         </div>
       </div>
     </div>)

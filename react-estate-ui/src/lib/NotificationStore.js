@@ -11,6 +11,7 @@ export const useNotifStore = create((set) => ({
     }
   
   },
+  increment:()=>set((state) => ({ Notifications: state.Notifications + 1 })),
   decrement: () => set((state) => ({ Notifications: state.Notifications - 1 })),
   removeAllBears: () => set({ Notifications: 0 }),
 }))

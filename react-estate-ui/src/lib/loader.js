@@ -23,9 +23,12 @@ export const LoadAll = async ({request,params})=>{
 }
 export const ProfilePostsLoader = async ({params})=>{
     const res = ApiRequest.get(`/users/profilePosts`,{withCredentials:true });
-    const res2 = ApiRequest.get(`/chats`,{withCredentials:true});
     return defer({
-        chats: res2,
         combinedposts: res,
     })
+}
+
+export const ChatsLoader = async ()=>{
+    const res2 = (await ApiRequest.get(`/chats`,{withCredentials:true})).data.chats;
+    return res2
 }

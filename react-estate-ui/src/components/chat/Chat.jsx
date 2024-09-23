@@ -5,7 +5,12 @@ import timeAgo from "../../lib/TimeCalc";
 import { useSocketContext } from "../../context/SocketContext";
 import { useNotifStore } from "../../lib/NotificationStore";
 import ApiRequest from "../../lib/AxiosConfig";
-function Chat({ chats }) {
+import { ChatsLoader } from "../../lib/loader";
+import SkeletonChat from "../Cardloader/SkeletonChat";
+function Chat() {
+  const [chats,setChats]= useState([])
+  const [loading,setloading] = useState(true)
+  const [error,SetError]= useState("")
   const [SendMessage, setSendMessage] = useState("");
   const { user } = useAuthContext();
   const { socket } = useSocketContext();
@@ -18,6 +23,12 @@ function Chat({ chats }) {
       const res = await ApiRequest.get(`/chats/${id}`, {
         withCredentials: true,
       });
+      setChats(chats=>chats.map(l=>{
+        if(l.id===id){
+          l.seenBy.push(user.id)
+        }
+        return l        
+      }))
       setChat({ ...res.data.chat, receiver });
       setSelectedChatId(id);
       if(!res.data.chat.seenBy.includes(user.id)){
@@ -56,8 +67,9 @@ function Chat({ chats }) {
     };
     if (chat && socket) {
       socket.on("getMessage", (data) => {
-        setChat({
+        setChat((chat)=>({
           ...chat,
+          lastMessage:data,
           messages: [
             ...chat.messages,
             {
@@ -67,7 +79,16 @@ function Chat({ chats }) {
               createdAt: new Date(),
             },
           ],
-        });
+        }));
+        setChats(chats=>{
+        return chats.map(singlechat=>{
+            if(singlechat.id===chat.id){
+              singlechat.lastMessage=data
+              singlechat.seenBy=singlechat.seenBy.filter(l=>l.id!==user.id)
+            }
+            return singlechat
+          })
+        })
         read();
       });
     }
@@ -77,6 +98,24 @@ function Chat({ chats }) {
       }
     };
   }, [socket, chat]);
+  useEffect(()=>{
+    const fetchChats = async ()=>{
+      try{
+        const chats= await ChatsLoader()
+        setChats(chats)
+        setloading(false)
+      }catch(er){
+          setloading(false)
+          SetError(er)
+      }
+      finally{
+        setloading(false)
+      }
+     
+    }
+    fetchChats()
+  },[])
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -87,6 +126,16 @@ function Chat({ chats }) {
       scrollToBottom();
     }
   }, [chat]);
+
+if(loading){
+  return <SkeletonChat/>
+}
+if(error){
+  return <p>there was some error in loading chats</p>
+}
+if(chats.length<=0){
+return <p>there are no chats</p>
+}
 
   return (
     <div className="chat">

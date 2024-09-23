@@ -57,10 +57,9 @@ const httpServer = http.createServer((req, res) => {
   }
 });
 
-// Initialize Socket.IO and bind it to the HTTP server
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://dreamestate.vercel.app", // Adjust the CORS as needed
+    origin:"https://dreamestate.vercel.app",
   },
 });
 
@@ -84,7 +83,6 @@ const getUser = (userId) => {
 // Handle WebSocket connections
 io.on("connection", (socket) => {
   console.log("A user connected");
-
   socket.on("newUser", (userId) => {
     addUser(userId, socket.id);
     console.log(`User ${userId} connected with socket ID: ${socket.id}`);

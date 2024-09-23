@@ -11,6 +11,9 @@ importers:
       socket.io:
         specifier: ^4.7.5
         version: 4.7.5
+      sockets:
+        specifier: 'file:'
+        version: 'file:'
 
 packages:
 
@@ -88,6 +91,9 @@ packages:
   socket.io@4.7.5:
     resolution: {integrity: sha512-DmeAkF6cwM9jSfmp6Dr/5/mfMwb5Z5qRrSXLpo3Fq5SqyU8CMF15jIN4ZhfSwu35ksM1qmHZDQ/DK5XTccSTvA==}
     engines: {node: '>=10.2.0'}
+
+  'sockets@file:':
+    resolution: {directory: '', type: directory}
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
@@ -196,6 +202,14 @@ snapshots:
       engine.io: 6.5.5
       socket.io-adapter: 2.5.5
       socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
+
+  'sockets@file:':
+    dependencies:
+      socket.io: 4.7.5
     transitivePeerDependencies:
       - bufferutil
       - supports-color
