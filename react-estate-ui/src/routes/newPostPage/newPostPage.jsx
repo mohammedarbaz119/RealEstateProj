@@ -17,7 +17,7 @@ function NewPostPage() {
     setImages(prevImages => prevImages.filter((_, i) => i !== index));
   };
   useEffect(() => {
-    console.log(images);
+    // console.log(images);
   }, [images]);
   const onSubmit = async (data) => {
     try {

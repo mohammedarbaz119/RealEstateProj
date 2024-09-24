@@ -60,6 +60,7 @@ const httpServer = http.createServer((req, res) => {
 const io = new Server(httpServer, {
   cors: {
     origin:"https://dreamestate.vercel.app",
+   
   },
 });
 
@@ -88,10 +89,10 @@ io.on("connection", (socket) => {
     console.log(`User ${userId} connected with socket ID: ${socket.id}`);
   });
 
-  socket.on("sendMessage", ({ receiverId, data }) => {
+  socket.on("sendMessage", ({ receiverId, data,chatID}) => {
     const receiver = getUser(receiverId);
     if (receiver) {
-      io.to(receiver.socketId).emit("getMessage", data);
+      io.to(receiver.socketId).emit("getMessage", {data,chatID});
     }
   });
 

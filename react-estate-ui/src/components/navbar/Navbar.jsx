@@ -13,8 +13,9 @@ function Navbar() {
   const { user, updateUser } = useAuthContext();
   const nav = useNavigate();
   const fetchnotifications = useNotifStore((state) => state.fetchnotifs);
+  
   if(user){
-    fetchnotifications();
+    setTimeout(()=> fetchnotifications(),1000)
   }
 
   const handleLogout = async () => {

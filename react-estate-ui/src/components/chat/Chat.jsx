@@ -8,9 +8,9 @@ import ApiRequest from "../../lib/AxiosConfig";
 import { ChatsLoader } from "../../lib/loader";
 import SkeletonChat from "../Cardloader/SkeletonChat";
 function Chat() {
-  const [chats,setChats]= useState([])
-  const [loading,setloading] = useState(true)
-  const [error,SetError]= useState("")
+  const [chats, setChats] = useState([])
+  const [loading, setloading] = useState(true)
+  const [error, SetError] = useState("")
   const [SendMessage, setSendMessage] = useState("");
   const { user } = useAuthContext();
   const { socket } = useSocketContext();
@@ -18,20 +18,23 @@ function Chat() {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const messagesEndRef = useRef(null);
   const decrementnotif = useNotifStore((state) => state.decrement);
+  const incrementnotif = useNotifStore((state) => state.increment)
+  
+
   const handleOpenChat = async (id, receiver) => {
     try {
       const res = await ApiRequest.get(`/chats/${id}`, {
         withCredentials: true,
       });
-      setChats(chats=>chats.map(l=>{
-        if(l.id===id){
+      setChats(chats => chats.map(l => {
+        if (l.id === id) {
           l.seenBy.push(user.id)
         }
-        return l        
+        return l
       }))
       setChat({ ...res.data.chat, receiver });
       setSelectedChatId(id);
-      if(!res.data.chat.seenBy.includes(user.id)){
+      if (!res.data.chat.seenBy.includes(user.id)) {
         decrementnotif();
       }
     } catch (err) {
@@ -45,6 +48,7 @@ function Chat() {
       socket.emit("sendMessage", {
         data: SendMessage,
         receiverId: chat.receiver.id,
+        chatID: chat.id
       });
       const res = await ApiRequest.post(
         `/messages/${chat.id}`,
@@ -52,11 +56,13 @@ function Chat() {
         { withCredentials: true }
       );
       setSendMessage("");
-      setChat({ ...chat,lastMessage:res.data.message, messages: [...chat.messages, res.data.message] });
+      setChat({ ...chat, lastMessage: res.data.message, messages: [...chat.messages, res.data.message] });
     } catch (err) {
       console.log(err);
     }
   };
+
+
   useEffect(() => {
     const read = async () => {
       try {
@@ -65,31 +71,34 @@ function Chat() {
         console.log(err);
       }
     };
-    if (chat && socket) {
+    if (socket) {
       socket.on("getMessage", (data) => {
-        setChat((chat)=>({
-          ...chat,
-          lastMessage:data,
-          messages: [
-            ...chat.messages,
-            {
-              text: data,
-              userId: chat.receiver.id,
-              id: chat.receiver.id,
-              createdAt: new Date(),
-            },
-          ],
-        }));
-        setChats(chats=>{
-        return chats.map(singlechat=>{
-            if(singlechat.id===chat.id){
-              singlechat.lastMessage=data
-              singlechat.seenBy=singlechat.seenBy.filter(l=>l.id!==user.id)
+        if (chat) {
+          setChat((chat) => ({
+            ...chat,
+            lastMessage: data.data,
+            messages: [
+              ...chat.messages,
+              {
+                text: data.data,
+                userId: chat.receiver.id,
+                id: chat.receiver.id,
+                createdAt: new Date(),
+              },
+            ],
+          }));
+          read();
+        }
+        incrementnotif();
+        setChats(chats => {
+          return chats.map(singlechat => {
+            if (singlechat.id === data.chatID) {
+              singlechat.lastMessage = data.data
+              singlechat.seenBy = singlechat.seenBy.filter(l => l !== user.id)
             }
             return singlechat
           })
         })
-        read();
       });
     }
     return () => {
@@ -98,23 +107,25 @@ function Chat() {
       }
     };
   }, [socket, chat]);
-  useEffect(()=>{
-    const fetchChats = async ()=>{
-      try{
-        const chats= await ChatsLoader()
+
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const chats = await ChatsLoader()
         setChats(chats)
         setloading(false)
-      }catch(er){
-          setloading(false)
-          SetError(er)
+      } catch (er) {
+        setloading(false)
+        SetError(er)
       }
-      finally{
+      finally {
         setloading(false)
       }
-     
+
     }
     fetchChats()
-  },[])
+  }, [])
 
 
   const scrollToBottom = () => {
@@ -127,15 +138,15 @@ function Chat() {
     }
   }, [chat]);
 
-if(loading){
-  return <SkeletonChat/>
-}
-if(error){
-  return <p>there was some error in loading chats</p>
-}
-if(chats.length<=0){
-return <p>there are no chats</p>
-}
+  if (loading) {
+    return <SkeletonChat />
+  }
+  if (error) {
+    return <p>there was some error in loading chats</p>
+  }
+  if (chats.length <= 0) {
+    return <p>there are no chats</p>
+  }
 
   return (
     <div className="chat">
@@ -144,17 +155,16 @@ return <p>there are no chats</p>
         {chats.map((chat) => (
           <div
             onClick={() => handleOpenChat(chat.id, chat.receiver)}
-            className={`message ${
-              selectedChatId === chat.id ? "selected" : ""
-            }`} // Conditionally apply the 'selected' class
+            className={`message ${selectedChatId === chat.id ? "selected" : ""
+              }`} // Conditionally apply the 'selected' class
             key={chat.id}
             style={{
               backgroundColor:
                 selectedChatId === chat.id
                   ? "#d3d3d3"
                   : chat.seenBy.includes(user.id)
-                  ? "white"
-                  : "#fecd514e",
+                    ? "white"
+                    : "#fecd514e",
             }}
           >
             <img src={chat.receiver.avatar || "/noavatar.jpeg"} alt="" />
@@ -173,7 +183,7 @@ return <p>there are no chats</p>
             <span className="close" onClick={() => {
               setSelectedChatId(null)
               setChat(null)
-              }}>
+            }}>
               X
             </span>
           </div>
