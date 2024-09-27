@@ -1,11 +1,18 @@
 @import "../../responsive.scss";
 
+@mixin smm{
+  @media (max-width: 738px) {
+    @content;
+  }
+
+}
 .profilePage {
   display: flex;
   height: 100%;
-  @include sm{
+  @include smm{
     flex-direction: column;
-    overflow: auto;
+    overflow-x: hidden;
+    width: 95vw;
   }
 
   @include md{
@@ -33,16 +40,18 @@
       .title{
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-around;
 
         h1{
           font-weight: 300;
+          font-size: 30px;
         }
 
         button{
           padding: 12px 24px;
           background-color: #fece51;
           cursor: pointer;
+          border-radius: 10px;
           border: none;
         }
       }
@@ -58,12 +67,12 @@
           gap: 20px;
         }
         button{
-          color: white;
-        
+          color: white;        
           width: 120px;
           padding: 12px 24px;
           background-color: rgb(32, 117, 32);
           cursor: pointer;
+          border-radius: 8px;
           border: none;
         }
 

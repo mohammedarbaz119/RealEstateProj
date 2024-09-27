@@ -9,7 +9,6 @@ import { useEffect } from "react";
 import { Suspense } from "react";
 import { useState } from "react";
 import SkeletonCard from "../../components/skeletonloader/SkeletonCard";
-import SkeletonChat from "../../components/Cardloader/SkeletonChat";
 import ApiRequest from "../../lib/AxiosConfig";
 
 function ProfilePage() {

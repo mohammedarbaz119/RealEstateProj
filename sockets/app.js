@@ -59,7 +59,7 @@ const httpServer = http.createServer((req, res) => {
 
 const io = new Server(httpServer, {
   cors: {
-    origin:"https://dreamestate.vercel.app",
+    origin:["https://dreamestate.vercel.app"],
    
   },
 });

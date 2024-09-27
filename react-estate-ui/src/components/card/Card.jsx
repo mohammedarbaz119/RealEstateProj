@@ -128,7 +128,7 @@ const openModal = () => {
       </Link>
       <div className="textContainer">
         <h2 className="title">
-          <Link to={`/listing/${item.id}`}>{item.title}</Link>
+          <Link to={`/listing/${item.id}`} >{item.title}</Link>
         </h2>
         <p className="address">
           <img src="/pin.png" alt="" />
@@ -147,10 +147,10 @@ const openModal = () => {
             </div>
           </div>
           <div className="icons">
-            <div className="icon" onClick={handleSave} >
+            <div className="icon icond" onClick={handleSave} >
               <img src={"/save.png"} alt="" style={{backgroundColor:isSaved?"orange":"white"}}/>
             </div>
-            {item.userId!==user?.id&&<div className="icon" onClick={openModal}>
+            {item.userId!==user?.id&&<div className="icon icond" onClick={openModal}>
               <img src="/chat.png" alt="" />
             </div>}
           </div>
